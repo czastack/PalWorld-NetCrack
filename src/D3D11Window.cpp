@@ -1,4 +1,5 @@
 #include "../pch.h"
+#ifdef DLL_ENABLE_IMGUI
 #include "../include/D3D11Window.hpp"
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -216,7 +217,7 @@ namespace DX11_Base {
 		b_ImGui_Initialized = FALSE;
 		return 0;
 	}
-	
+
 	/// <summary>
 	/// RENDER LOOP
 	/// </summary>
@@ -264,7 +265,7 @@ namespace DX11_Base {
 		DisableAll();
 		return;
 	}
-	
+
 	void D3D11Window::DisableHook(uint16_t Index)
 	{
 		assert(Index >= 0);
@@ -286,3 +287,4 @@ namespace DX11_Base {
 		Unhook();
 	}
 }
+#endif

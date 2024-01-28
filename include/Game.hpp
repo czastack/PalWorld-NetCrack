@@ -25,7 +25,7 @@ namespace DX11_Base {
 		HWND g_GameWindow{};
 		int g_GameWidth;
 		int g_GameHeight;
-		ImVec2 g_WindowSize{};
+		// ImVec2 g_WindowSize{};
 		LPCSTR g_GameTitle;
 		LPCSTR g_ClassName;
 		LPCSTR g_GamePath;

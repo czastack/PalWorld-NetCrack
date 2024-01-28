@@ -2,6 +2,7 @@
 #include "feature.h"
 using namespace SDK;
 
+#ifdef DLL_ENABLE_IMGUI
 void ESP()
 {
 	APalPlayerCharacter* pPalCharacter = Config.GetPalPlayerCharacter();
@@ -41,7 +42,7 @@ void ESP_DEBUG(float mDist, ImVec4 color, UClass* mEntType)
 	std::vector<AActor*> actors;
 	if (!config::GetAllActorsofType(mEntType, &actors, true))
 		return;
-	
+
 	auto draw = ImGui::GetWindowDrawList();
 
 	__int32 actorsCount = actors.size();
@@ -78,15 +79,16 @@ void DrawUActorComponent(SDK::TArray<SDK::UActorComponent*> Comps,ImColor color)
 	{
 		for (int i = 0; i < Comps.Count(); i++)
 		{
-			
+
 			if (Comps[i] != NULL)
 			{
-				
+
 				ImGui::GetBackgroundDrawList()->AddText(nullptr, 16, ImVec2(10, 10 + (i * 30)), color, Comps[i]->GetFullName().c_str());
 			}
 		}
 	}
 }
+#endif
 
 void UnlockAllEffigies() {
 	SDK::APalPlayerCharacter* pPalCharacter = Config.GetPalPlayerCharacter();

@@ -1,13 +1,17 @@
 #pragma once
+#ifdef DLL_ENABLE_IMGUI
 #include "include/Menu.hpp"
+#endif
 #include "config.h"
 #include <Windows.h>
 
+#ifdef DLL_ENABLE_IMGUI
 void ESP();
 
 void ESP_DEBUG(float mDist, ImVec4 color, SDK::UClass* mEntType = SDK::AActor::StaticClass());
 
 void DrawUActorComponent(SDK::TArray<SDK::UActorComponent*> Comps, ImColor color);
+#endif
 
 void UnlockAllEffigies();
 

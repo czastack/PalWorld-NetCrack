@@ -1,4 +1,5 @@
 #include "../pch.h"
+#ifdef DLL_ENABLE_IMGUI
 #include "../include/Hooking.hpp"
 namespace DX11_Base {
 	Hooking::Hooking()
@@ -36,3 +37,4 @@ namespace DX11_Base {
 		return;
 	}
 }
+#endif

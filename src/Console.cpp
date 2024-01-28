@@ -1,4 +1,5 @@
 #include "../pch.h"
+#ifdef DLL_ENABLE_IMGUI
 #include "../include/Console.hpp"
 namespace DX11_Base {
 	Console::Console()
@@ -70,3 +71,4 @@ namespace DX11_Base {
 		return;
 	}
 }
+#endif

@@ -1,4 +1,5 @@
 #include "../pch.h"
+#ifdef DLL_ENABLE_IMGUI
 #include "../include/Menu.hpp"
 #include "SDK.hpp"
 #include "config.h"
@@ -128,7 +129,7 @@ void Spawn_Multiple(config::QuickItemSet Set)
                 AddItem(InventoryData, _strdup(database::basic_items_stackable[i].c_str()), 100);
             }
         case 1:
-            for (int i = 0; i < IM_ARRAYSIZE(database::basic_items_single); i++) 
+            for (int i = 0; i < IM_ARRAYSIZE(database::basic_items_single); i++)
              {
                     AddItem(InventoryData, _strdup(database::basic_items_single[i].c_str()), 1);
              }
@@ -163,7 +164,7 @@ namespace DX11_Base {
             //  Base ImGui Styling , Aplying a custyom style is left up to you.
             ImGui::StyleColorsClassic();
 
-            /// EXAMPLE COLOR 
+            /// EXAMPLE COLOR
             //colors[ImGuiCol_FrameBg] = ImVec4(0, 0, 0, 0);
 
             //	COLORS
@@ -184,7 +185,7 @@ namespace DX11_Base {
     namespace Tabs {
         void TABPlayer()
         {
-            
+
             //�л�����һ��
             ImGui::Checkbox("SpeedHack", &Config.IsSpeedHack);
 
@@ -225,11 +226,11 @@ namespace DX11_Base {
                     }
                 }
             }
-            
+
             ImGui::SliderFloat("SpeedModifilers", &Config.SpeedModiflers, 1, 10);
             ImGui::SliderInt("AttackModifilers", &Config.DamageUp, 0, 200000);
             ImGui::SliderInt("defenseModifilers", &Config.DefuseUp, 0, 200000);
-            
+
             if (ImGui::Button("PrintPlayerAddr", ImVec2(ImGui::GetContentRegionAvail().x - 3, 20)))
             {
                 SDK::APalPlayerCharacter* p_appc = Config.GetPalPlayerCharacter();
@@ -245,7 +246,7 @@ namespace DX11_Base {
             ImGui::Checkbox("IsQuick", &Config.IsQuick);
             ImGui::Checkbox("Open Manager", &Config.bisOpenManager);
             ImGui::Checkbox("SafeTeleport", &Config.IsSafe);
-            //creadit 
+            //creadit
             //ImGui::Checkbox("PalIsMonster", &Config.IsMonster);
             ImGui::InputFloat3("Pos:", Config.Pos);
             ImGui::InputInt("EXP:", &Config.EXP);
@@ -277,12 +278,12 @@ namespace DX11_Base {
 
             ImGui::InputInt("Slot to modify (start 0):", &Config.AddItemSlot);
             ImGui::InputInt("Multiple of how much:", &Config.AddItemCount);
-            
+
             if (ImGui::Button("Give items from slot", ImVec2(ImGui::GetContentRegionAvail().x - 3, 20)))
             {
                 AddToInventoryContainer(Config.AddItemCount, Config.AddItemSlot);
             }
-            
+
             // this does not work lol
             // std::stringstream AddItemsString;
             // AddItemsString << "Give " << Config.AddItemCount << " items from slot" << Config.AddItemSlot;
@@ -379,7 +380,7 @@ namespace DX11_Base {
                             SDK::FFixedPoint fixpoint = SDK::FFixedPoint();
                             fixpoint.Value = 99999999;
                             Config.GetPalPlayerCharacter()->ReviveCharacter_ToServer(fixpoint);
-                            
+
                         }
                     }
                 }
@@ -430,7 +431,7 @@ namespace DX11_Base {
             const auto& filteredItems = Config.GetFilteredItems();
 
             for (const auto& itemName : filteredItems) {
-                if (ImGui::Button(itemName.c_str())) 
+                if (ImGui::Button(itemName.c_str()))
                 {
                         strcpy_s(Config.ItemName, itemName.c_str());
                         continue;
@@ -612,7 +613,7 @@ namespace DX11_Base {
             ImGui::PopStyleColor();
             ImGui::PopStyleColor();
         }
-        
+
         //  Display Menu Content
         //Tabs::TABMain();
 
@@ -649,7 +650,7 @@ namespace DX11_Base {
         }
         ImGui::End();
 
-        
+
 	}
 
 	void Menu::HUD(bool* p_open)
@@ -746,6 +747,7 @@ namespace DX11_Base {
                 }
             }
         }
- 
+
     }
 }
+#endif

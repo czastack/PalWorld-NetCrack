@@ -2,8 +2,10 @@
 #include "SDK.hpp"
 #include "config.h"
 #include "include/helper.h"
-#include "include/Console.hpp"
 #include "include/Game.hpp"
+
+#ifdef DLL_ENABLE_IMGUI
+#include "include/Console.hpp"
 #include "include/D3D11Window.hpp"
 #include "include/Hooking.hpp"
 using namespace DX11_Base;
@@ -23,7 +25,7 @@ DWORD WINAPI MainThread_Initialize()
     g_Console->InitializeConsole("Debug Console");
     g_Console->printdbg("ImGui Hook - Initializing . . .\n\n", g_Console->color.DEFAULT);
 #endif
-    ///  ESTABLISH GAME DATA   
+    ///  ESTABLISH GAME DATA
     g_GameData = std::make_unique<GameData>();
     g_GameVariables = std::make_unique<GameVariables>();
 
@@ -50,3 +52,15 @@ DWORD WINAPI MainThread_Initialize()
     FreeLibraryAndExitThread(g_hModule, EXIT_SUCCESS);
     return EXIT_SUCCESS;
 }
+#else
+using namespace DX11_Base;
+
+DWORD WINAPI MainThread_Initialize()
+{
+    ///  ESTABLISH GAME DATA
+    g_GameData = std::make_unique<GameData>();
+    g_GameVariables = std::make_unique<GameVariables>();
+    return EXIT_SUCCESS;
+}
+
+#endif

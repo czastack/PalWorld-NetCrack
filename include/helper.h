@@ -2,10 +2,12 @@
 #define DEBUG 1
 
 //	External Libraries
+#ifdef DLL_ENABLE_IMGUI
 #include "../libs/ImGui/imgui.h"
 #include "../libs/ImGui/imgui_internal.h"
 #include "../libs/ImGui/imgui_Impl_dx11.h"
 #include "../libs/ImGui/imgui_Impl_Win32.h"
+#endif // DLL_ENABLE_IMGUI
 
 namespace DX11_Base {
 	using namespace std::chrono_literals;
