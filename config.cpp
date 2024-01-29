@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "config.h"
 #include <algorithm>
+#ifdef DLL_ENABLE_IMGUI
 #include "include/Menu.hpp"
+#endif
 
 config Config;
 
@@ -10,6 +12,7 @@ Tick OldTickFunc;
 
 void config::Update(const char* filterText)
 {
+#ifdef DLL_ENABLE_IMGUI
     Config.db_filteredItems.clear();
 
     const auto& itemsToSearch = database::db_items;
@@ -20,9 +23,11 @@ void config::Update(const char* filterText)
         }
     }
     std::sort(Config.db_filteredItems.begin(), Config.db_filteredItems.end());
+#endif
 }
 const std::vector<std::string>& config::GetFilteredItems() { return Config.db_filteredItems; }
 
+#ifdef DLL_ENABLE_IMGUI
 bool DetourTick(SDK::APalPlayerCharacter* m_this, float DeltaSecond)
 {
     if (m_this->GetPalPlayerController() != NULL)
@@ -35,6 +40,8 @@ bool DetourTick(SDK::APalPlayerCharacter* m_this, float DeltaSecond)
     }
     return OldTickFunc(m_this, DeltaSecond);
 }
+#endif
+
 SDK::UWorld* config::GetUWorld()
 {
     static uint64_t gworld_ptr = 0;
@@ -217,13 +224,13 @@ void config::Init()
     Config.ClientBase = (DWORD64)GetModuleHandleA("PalWorld-Win64-Shipping.exe");
 
     SDK::InitGObjects();
-
+#ifdef DLL_ENABLE_IMGUI
     Config.gWorld = Config.GetUWorld();
 
     TickFunc = (Tick)(Config.ClientBase + Config.offset_Tick);
 
     MH_CreateHook(TickFunc, DetourTick, reinterpret_cast<void**>(&OldTickFunc));
-
+#endif
     //init database
     ZeroMemory(&Config.db_filteredItems, sizeof(Config.db_filteredItems));
 }

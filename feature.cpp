@@ -178,6 +178,7 @@ void AddItemToInventoryByName(UPalPlayerInventoryData* data, char* itemName, int
 	data->RequestAddItem(Name, count, true);
 }
 
+#ifdef DLL_ENABLE_IMGUI
 // Credit: asashi
 void SpawnMultiple_ItemsToInventory(config::QuickItemSet Set)
 {
@@ -208,6 +209,7 @@ void SpawnMultiple_ItemsToInventory(config::QuickItemSet Set)
 		break;
 	}
 }
+#endif
 
 //
 void AnyWhereTP(FVector& vector, bool IsSafe)

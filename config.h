@@ -1,8 +1,10 @@
 #pragma once
 #include <Windows.h>
 #include "libs/utils/memory.h"
+#ifdef DLL_ENABLE_IMGUI
 #include "database.h"
 #include "ItemList.hpp"
+#endif
 
 typedef bool(*Tick)(SDK::APalPlayerCharacter* m_this, float DeltaSecond);
 
@@ -66,7 +68,7 @@ public:
 	static SDK::UWorld* GetUWorld();
 	static SDK::UPalCharacterImportanceManager* GetCharacterImpManager();
 	static SDK::ULocalPlayer* GetLocalPlayer();
-	static SDK::APalPlayerCharacter* GetPalPlayerCharacter(); 
+	static SDK::APalPlayerCharacter* GetPalPlayerCharacter();
 	static SDK::APalPlayerController* GetPalPlayerController();
 	static SDK::APalPlayerState* GetPalPlayerState();
 	static SDK::UPalPlayerInventoryData* GetInventoryComponent();
