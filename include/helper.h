@@ -9,7 +9,8 @@
 #include "../libs/ImGui/imgui_Impl_Win32.h"
 #endif // DLL_ENABLE_IMGUI
 
-namespace DX11_Base {
+namespace DX11_Base 
+{
 	using namespace std::chrono_literals;
 	inline HMODULE g_hModule{};
 	inline LPCWSTR g_ModuleName{};

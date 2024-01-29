@@ -1,8 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "libs/utils/memory.h"
-#include "SDK.hpp"
 #include "database.h"
+#include "ItemList.hpp"
 
 typedef bool(*Tick)(SDK::APalPlayerCharacter* m_this, float DeltaSecond);
 
@@ -14,6 +14,7 @@ public:
 	DWORD64 offset_Tick = 0x2AB1DC0;//APalPlayerCharacter::Tick
 	//check
 	bool IsESP = false;
+	bool IsFullbright = false;
 	bool IsAimbot = false;
 	bool IsSpeedHack = false;
 	bool IsAttackModiler = false;
@@ -64,7 +65,9 @@ public:
 	//static function
 	static SDK::UWorld* GetUWorld();
 	static SDK::UPalCharacterImportanceManager* GetCharacterImpManager();
-	static SDK::APalPlayerCharacter* GetPalPlayerCharacter();
+	static SDK::ULocalPlayer* GetLocalPlayer();
+	static SDK::APalPlayerCharacter* GetPalPlayerCharacter(); 
+	static SDK::APalPlayerController* GetPalPlayerController();
 	static SDK::APalPlayerState* GetPalPlayerState();
 	static SDK::UPalPlayerInventoryData* GetInventoryComponent();
 	static SDK::APalWeaponBase* GetPlayerEquippedWeapon();
