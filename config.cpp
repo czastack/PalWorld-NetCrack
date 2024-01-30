@@ -77,18 +77,21 @@ SDK::ULocalPlayer* config::GetLocalPlayer()
     SDK::UGameInstance* pGameInstance = pWorld->OwningGameInstance;
     if (!pGameInstance)
         return nullptr;
-    
+
     return pGameInstance->LocalPlayers[0];
 }
 
 SDK::APalPlayerCharacter* config::GetPalPlayerCharacter()
 {
-
+#ifdef DLL_ENABLE_IMGUI
     if (Config.localPlayer != NULL)
     {
         return Config.localPlayer;
     }
-    return nullptr;
+#else
+    Config.localPlayer = SDK::UPalUtility::GetDefaultObj()->GetPlayerCharacter(Config.gWorld);
+#endif
+    return Config.localPlayer;
 }
 
 SDK::APalPlayerController* config::GetPalPlayerController()
@@ -224,8 +227,8 @@ void config::Init()
     Config.ClientBase = (DWORD64)GetModuleHandleA("PalWorld-Win64-Shipping.exe");
 
     SDK::InitGObjects();
-#ifdef DLL_ENABLE_IMGUI
     Config.gWorld = Config.GetUWorld();
+#ifdef DLL_ENABLE_IMGUI
 
     TickFunc = (Tick)(Config.ClientBase + Config.offset_Tick);
 

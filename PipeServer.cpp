@@ -91,6 +91,7 @@ DWORD WINAPI PipeThread()
                 }
                 break;
             }
+            pchRequest.data()[cbBytesRead] = 0;
             // 处理你接收到的字符串
             // Process the incoming message.
             GetAnswerToRequest(pchRequest, pchReply, &cbReplyBytes);
@@ -146,9 +147,17 @@ static void AddItem(TCHAR* itemName, int count)
     // obtain lib instance
     static UKismetStringLibrary* lib = UKismetStringLibrary::GetDefaultObj();
     FName Name = lib->Conv_StringToName(FString(itemName));
-    SDK::UPalPlayerInventoryData* InventoryData = Config.GetPalPlayerCharacter()->GetPalPlayerController()->GetPalPlayerState()->GetInventoryData();
-    // Call
-    InventoryData->RequestAddItem(Name, count, true);
+    SDK::APalPlayerCharacter* p_appc = Config.GetPalPlayerCharacter();
+    SDK::APalPlayerState* p_apps = Config.GetPalPlayerState();
+    if (p_appc && p_apps)
+    {
+        SDK::UPalPlayerInventoryData* InventoryData = p_appc->GetPalPlayerController()->GetPalPlayerState()->GetInventoryData();
+        // Call
+        if (InventoryData)
+        {
+            InventoryData->RequestAddItem(Name, count, true);
+        }
+    }
 }
 
 template<typename T>

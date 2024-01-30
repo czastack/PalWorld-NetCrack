@@ -53,10 +53,16 @@ using namespace DX11_Base;
 DWORD WINAPI MainThread_Initialize()
 {
     ///  ESTABLISH GAME DATA
+    MH_Initialize();
     g_GameData = std::make_unique<GameData>();
     g_GameVariables = std::make_unique<GameVariables>();
+    g_GameVariables->Init();
+    Config.Init();
+    // MH_EnableHook(MH_ALL_HOOKS);
     g_Running = TRUE;
     PipeThread();
+    g_Running = FALSE;
+    // MH_RemoveHook(MH_ALL_HOOKS);
     FreeLibraryAndExitThread(g_hModule, EXIT_SUCCESS);
     return EXIT_SUCCESS;
 }

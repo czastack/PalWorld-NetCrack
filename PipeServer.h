@@ -2,6 +2,7 @@
 
 enum class PalPipeRequest
 {
+    None,
     GetFName,
     AddItem,
     AddPal,
