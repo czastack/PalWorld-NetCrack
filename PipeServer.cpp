@@ -12,7 +12,7 @@
 
 void GetAnswerToRequest(std::vector<uint8_t> &pchRequest, std::vector<uint8_t> &pchReply, int *pchBytes);
 
-DWORD WINAPI PipeThread(LPVOID lpvParam)
+DWORD WINAPI PipeThread()
 {
     // DWORD pid = GetCurrentProcessId();
     DWORD pid = 0;
@@ -133,26 +133,97 @@ DWORD WINAPI PipeThread(LPVOID lpvParam)
     return 0;
 }
 
+using namespace SDK;
+
+static int32_t GetFNameValue(const TCHAR* text)
+{
+    static UKismetStringLibrary* lib = UKismetStringLibrary::GetDefaultObj();
+    FName Name = lib->Conv_StringToName(FString(text));
+    return Name.ComparisonIndex;
+}
+
+static void AddItem(TCHAR* itemName, int count)
+{
+    // obtain lib instance
+    static UKismetStringLibrary* lib = UKismetStringLibrary::GetDefaultObj();
+    FName Name = lib->Conv_StringToName(FString(itemName));
+    SDK::UPalPlayerInventoryData* InventoryData = Config.GetPalPlayerCharacter()->GetPalPlayerController()->GetPalPlayerState()->GetInventoryData();
+    // Call
+    InventoryData->RequestAddItem(Name, count, true);
+}
+
+template<typename T>
+void WriteResult(std::vector<uint8_t> &pchReply, int *pchBytes, T value)
+{
+    *((T*)pchReply.data()) = value;
+    *pchBytes = sizeof(T);
+}
+
 void GetAnswerToRequest(std::vector<uint8_t> &pchRequest, std::vector<uint8_t> &pchReply, int *pchBytes)
 {
     PalPipeRequest &code = *(PalPipeRequest *)pchRequest.data();
     uint8_t *data_ptr = pchRequest.data() + sizeof(PalPipeRequest);
+    TCHAR *str_ptr = reinterpret_cast<TCHAR *>(data_ptr);
+    *pchBytes = 0;
     switch (code)
     {
-    case PalPipeRequest::AddItem:
-        _tprintf(TEXT("AddItem %s. \n"), reinterpret_cast<TCHAR *>(data_ptr));
+    case PalPipeRequest::GetFName:
+    {
+        int32_t result = GetFNameValue(str_ptr);
+        WriteResult(pchReply, pchBytes, result);
         break;
+    }
+    case PalPipeRequest::AddItem:
+    {
+        int count = *reinterpret_cast<int*>(data_ptr);
+        str_ptr = reinterpret_cast<TCHAR *>(data_ptr + 4);
+        AddItem(str_ptr, count);
+        break;
+    }
     case PalPipeRequest::AddPal:
-        _tprintf(TEXT("AddPal %s. \n"), reinterpret_cast<TCHAR *>(data_ptr));
+        // not support
+        break;
+    case PalPipeRequest::RespawnLocalPlayer:
+        RespawnLocalPlayer(true);
         break;
     case PalPipeRequest::Teleport:
     {
         float *array = reinterpret_cast<float *>(data_ptr);
-        _tprintf(TEXT("Teleport (%f, %f, %f). \n"), array[0], array[1], array[2]);
+        FVector pos(array[0], array[1], array[2]);
+        AnyWhereTP(pos, true);
         break;
     }
-    default:
+    case PalPipeRequest::UnlockAllEffigies:
+        UnlockAllEffigies();
+        break;
+    case PalPipeRequest::ExploitFly:
+    {
+        bool enable = *reinterpret_cast<bool*>(data_ptr);
+        ExploitFly(enable);
         break;
     }
-    *pchBytes = 0;
+    case PalPipeRequest::ReviveLocalPlayer:
+        ReviveLocalPlayer();
+        break;
+    case PalPipeRequest::GiveExperiencePoints:
+    {
+        int count = *reinterpret_cast<int*>(data_ptr);
+        GiveExperiencePoints(count);
+        break;
+    }
+    case PalPipeRequest::SetPlayerAttackParam:
+    {
+        // 好像要每帧都调用
+        int value = *reinterpret_cast<int*>(data_ptr);
+        SetPlayerAttackParam(value);
+        break;
+    }
+    case PalPipeRequest::SetPlayerDefenseParam:
+    {
+        // 好像要每帧都调用
+        int value = *reinterpret_cast<int*>(data_ptr);
+        SetPlayerDefenseParam(value);
+        break;
+    }
+    }
 }

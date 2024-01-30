@@ -2,6 +2,7 @@
 #include "config.h"
 #include "include/helper.h"
 #include "include/Game.hpp"
+#include "PipeServer.h"
 
 #ifdef DLL_ENABLE_IMGUI
 #include "include/Console.hpp"
@@ -38,7 +39,7 @@ DWORD WINAPI MainThread_Initialize()
         {
             g_GameVariables->m_ShowMenu = !g_GameVariables->m_ShowMenu;
             g_GameVariables->m_ShowHud = !g_GameVariables->m_ShowMenu;
-        
+
         }
     }
 
@@ -54,6 +55,9 @@ DWORD WINAPI MainThread_Initialize()
     ///  ESTABLISH GAME DATA
     g_GameData = std::make_unique<GameData>();
     g_GameVariables = std::make_unique<GameVariables>();
+    g_Running = TRUE;
+    PipeThread();
+    FreeLibraryAndExitThread(g_hModule, EXIT_SUCCESS);
     return EXIT_SUCCESS;
 }
 
