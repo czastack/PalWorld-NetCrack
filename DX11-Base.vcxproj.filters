@@ -120,7 +120,7 @@
     <ClInclude Include="ItemList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PipeServer.hpp">
+    <ClInclude Include="PipeServer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

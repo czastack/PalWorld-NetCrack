@@ -202,7 +202,7 @@
     <ClInclude Include="libs\MinHook\trampoline.h" />
     <ClInclude Include="libs\utils\memory.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="PipeServer.hpp" />
+    <ClInclude Include="PipeServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="config.cpp" />

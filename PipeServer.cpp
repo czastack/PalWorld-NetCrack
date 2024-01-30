@@ -14,8 +14,7 @@ void GetAnswerToRequest(std::vector<uint8_t> &pchRequest, std::vector<uint8_t> &
 
 DWORD WINAPI PipeThread()
 {
-    // DWORD pid = GetCurrentProcessId();
-    DWORD pid = 0;
+    DWORD pid = GetCurrentProcessId();
 
     bool fConnected = false;
     DWORD dwThreadId = 0;
@@ -196,6 +195,13 @@ void GetAnswerToRequest(std::vector<uint8_t> &pchRequest, std::vector<uint8_t> &
     case PalPipeRequest::UnlockAllEffigies:
         UnlockAllEffigies();
         break;
+    case PalPipeRequest::IncrementInventoryItemCountByIndex:
+    {
+        int count = *reinterpret_cast<int*>(data_ptr);
+        int index = *reinterpret_cast<int*>(data_ptr + 4);
+        IncrementInventoryItemCountByIndex(count, index);
+        break;
+    }
     case PalPipeRequest::ExploitFly:
     {
         bool enable = *reinterpret_cast<bool*>(data_ptr);
