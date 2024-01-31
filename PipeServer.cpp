@@ -75,7 +75,7 @@ DWORD WINAPI PipeThread()
             fSuccess = ReadFile(
                 hPipe,                   // handle to pipe
                 pchRequest.data(),       // buffer to receive data
-                BUFSIZE, // size of buffer
+                BUFSIZE - 2,             // size of buffer
                 &cbBytesRead,            // number of bytes read
                 NULL);                   // not overlapped I/O
 
@@ -92,6 +92,7 @@ DWORD WINAPI PipeThread()
                 break;
             }
             pchRequest.data()[cbBytesRead] = 0;
+            pchRequest.data()[cbBytesRead + 1] = 0;
             // 处理你接收到的字符串
             // Process the incoming message.
             GetAnswerToRequest(pchRequest, pchReply, &cbReplyBytes);
@@ -142,6 +143,18 @@ static int32_t GetFNameValue(const TCHAR* text)
     return Name.ComparisonIndex;
 }
 
+static void GetFNameValues(TCHAR* text, uint8_t *pchReply, int *pchBytes)
+{
+    int32_t *pInt = reinterpret_cast<int32_t*>(pchReply);
+    TCHAR* next_token = nullptr;
+    TCHAR* token = _tcstok_s(text, _T(","), &next_token);
+    while (token != nullptr) {
+        *pInt++ = GetFNameValue(token);
+        *pchBytes += 4;
+        token = _tcstok_s(nullptr, _T(","), &next_token);
+    }
+}
+
 static void AddItem(TCHAR* itemName, int count)
 {
     // obtain lib instance
@@ -161,9 +174,9 @@ static void AddItem(TCHAR* itemName, int count)
 }
 
 template<typename T>
-void WriteResult(std::vector<uint8_t> &pchReply, int *pchBytes, T value)
+void WriteResult(uint8_t *pchReply, int *pchBytes, T value)
 {
-    *((T*)pchReply.data()) = value;
+    *((T*)pchReply) = value;
     *pchBytes = sizeof(T);
 }
 
@@ -178,7 +191,12 @@ void GetAnswerToRequest(std::vector<uint8_t> &pchRequest, std::vector<uint8_t> &
     case PalPipeRequest::GetFName:
     {
         int32_t result = GetFNameValue(str_ptr);
-        WriteResult(pchReply, pchBytes, result);
+        WriteResult(pchReply.data(), pchBytes, result);
+        break;
+    }
+    case PalPipeRequest::GetFNameValues:
+    {
+        GetFNameValues(str_ptr, pchReply.data(), pchBytes);
         break;
     }
     case PalPipeRequest::AddItem:

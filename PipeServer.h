@@ -4,6 +4,7 @@ enum class PalPipeRequest
 {
     None,
     GetFName,
+    GetFNameValues,
     AddItem,
     AddPal,
     RespawnLocalPlayer,

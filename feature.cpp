@@ -158,9 +158,9 @@ void IncrementInventoryItemCountByIndex(__int32 mCount, __int32 mIndex)
 		return;
 
 	FPalItemId FirstItemId = pSelectedSlot->GetItemId();
-	__int32 StackCount = pSelectedSlot->GetStackCount();
-	__int32 mNewCount = StackCount += mCount;
-	InventoryData->RequestAddItem(FirstItemId.StaticId, mNewCount, true);
+	// __int32 StackCount = pSelectedSlot->GetStackCount();
+	// __int32 mNewCount = StackCount + mCount;
+	InventoryData->RequestAddItem(FirstItemId.StaticId, mCount, true);
 }
 
 //
