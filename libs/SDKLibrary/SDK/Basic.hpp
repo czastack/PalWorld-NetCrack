@@ -35,7 +35,7 @@ public:
 	{
 		return reinterpret_cast<uint8*>(ObjPtr);
 	};
-	
+
 	FUObjectItem** Objects;
 	uint8 Pad_0[0x08];
 	int32 MaxElements;
@@ -177,6 +177,7 @@ class FName
 public:
 	// GNames - either of type TNameEntryArray [<4.23] or FNamePool [>=4.23]
 	static inline void* GNames = nullptr;
+	static void(*AppendString)(const FName*, FString&);
 
 	// Members of FName - depending on configuration [WITH_CASE_PRESERVING_NAME | FNAME_OUTLINE_NUMBER]
 	int32 ComparisonIndex;
@@ -193,12 +194,12 @@ public:
 	inline std::string GetRawString() const
 	{
 		thread_local FString TempString(1024);
-		static void(*AppendString)(const FName*, FString&) = nullptr;
 
-		if (!AppendString)
-			AppendString = reinterpret_cast<void(*)(const FName*, FString&)>(uintptr_t(GetModuleHandle(0)) + Offsets::AppendString);
+		// if (!AppendString)
+		// 	AppendString = reinterpret_cast<void(*)(const FName*, FString&)>(uintptr_t(GetModuleHandle(0)) + Offsets::AppendString);
 
-		AppendString(this, TempString);
+		if (AppendString)
+			AppendString(this, TempString);
 
 		std::string OutputString = TempString.ToString();
 		TempString.ResetNum();
@@ -305,7 +306,7 @@ public:
 	KeyType Second;
 };
 
-class FTextData 
+class FTextData
 {
 public:
 	uint8 Pad[0x28];
@@ -313,15 +314,15 @@ public:
 	int32 Length;
 };
 
-class FText 
+class FText
 {
 public:
 	FTextData* Data;
 	uint8 Pad[0x10];
 
-	wchar_t* Get() const 
+	wchar_t* Get() const
 	{
-		if (Data) 
+		if (Data)
 			return Data->Name;
 
 		return nullptr;
@@ -548,7 +549,7 @@ enum class EClassCastFlags : uint64_t
 };
 
 inline constexpr EClassCastFlags operator|(EClassCastFlags Left, EClassCastFlags Right)
-{				
+{
 	using CastFlagsType = std::underlying_type<EClassCastFlags>::type;
 	return static_cast<EClassCastFlags>(static_cast<CastFlagsType>(Left) | static_cast<CastFlagsType>(Right));
 }

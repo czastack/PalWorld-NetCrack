@@ -62,6 +62,7 @@
         "xutility": "cpp",
         "map": "cpp",
         "xtree": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "fstream": "cpp"
     }
 }

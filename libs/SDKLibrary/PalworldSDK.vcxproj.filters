@@ -24,6 +24,9 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\utils\memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -40,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="SDK\Pal_functions.cpp">
       <Filter>Resource Files\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\utils\memory.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
