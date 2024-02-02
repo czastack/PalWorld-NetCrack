@@ -28,7 +28,7 @@ DWORD WINAPI MainThread_Initialize()
     g_Hooking->Hook();
 
 #if DEBUG
-    g_Console->printdbg("Main::Initialized\nUWorld:\t0x%llX\n", Console::Colors::green, Config.gWorld);
+    g_Console->printdbg("Main::Initialized\nUWorld:\t0x%llX\n", Console::Colors::green, Config.GetUWorld());
 #endif
 
     ///  RENDER LOOP

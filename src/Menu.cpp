@@ -434,7 +434,7 @@ namespace DX11_Base
         }
 
 
-        if (Config.gWorld)
+        if (Config.GetUWorld())
         {
             ImGui::Checkbox("filterPlayer", &Config.filterPlayer);
             SDK::TArray<SDK::AActor*> T = Config.GetUWorld()->PersistentLevel->Actors;

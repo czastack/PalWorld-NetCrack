@@ -49,15 +49,13 @@ SDK::UWorld* config::GetUWorld()
     {
         auto gworld = signature("48 8B 05 ? ? ? ? EB 05").instruction(3).add(7);
         gworld_ptr = gworld.GetPointer();
-        if (gworld_ptr)
-            Config.gWorld = *(SDK::UWorld**)gworld_ptr;
     }
     return (*(SDK::UWorld**)(gworld_ptr));
 }
 
 SDK::UPalCharacterImportanceManager* config::GetCharacterImpManager()
 {
-    SDK::UWorld* pWorld = Config.gWorld;
+    SDK::UWorld* pWorld = GetUWorld();
     if (!pWorld)
         return nullptr;
 
@@ -70,7 +68,7 @@ SDK::UPalCharacterImportanceManager* config::GetCharacterImpManager()
 
 SDK::ULocalPlayer* config::GetLocalPlayer()
 {
-    SDK::UWorld* pWorld = Config.gWorld;
+    SDK::UWorld* pWorld = GetUWorld();
     if (!pWorld)
         return nullptr;
 
@@ -89,7 +87,7 @@ SDK::APalPlayerCharacter* config::GetPalPlayerCharacter()
         return Config.localPlayer;
     }
 #else
-    Config.localPlayer = SDK::UPalUtility::GetDefaultObj()->GetPlayerCharacter(Config.gWorld);
+    Config.localPlayer = SDK::UPalUtility::GetDefaultObj()->GetPlayerCharacter(GetUWorld());
 #endif
     return Config.localPlayer;
 }
@@ -176,7 +174,7 @@ bool config::GetTAllPals(SDK::TArray<class SDK::APalCharacter*>* outResult)
 
 bool config::GetAllActorsofType(SDK::UClass* mType, std::vector<SDK::AActor*>* outArray, bool bLoopAllLevels, bool bSkipLocalPlayer)
 {
-    SDK::UWorld* pWorld = Config.gWorld;
+    SDK::UWorld* pWorld = GetUWorld();
     if (!pWorld)
         return false;
 
@@ -227,7 +225,7 @@ void config::Init()
     Config.ClientBase = (DWORD64)GetModuleHandleA("PalWorld-Win64-Shipping.exe");
 
     SDK::InitGObjects();
-    Config.gWorld = Config.GetUWorld();
+    Config.GetUWorld();
 #ifdef DLL_ENABLE_IMGUI
 
     TickFunc = (Tick)(Config.ClientBase + Config.offset_Tick);

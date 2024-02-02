@@ -256,7 +256,7 @@ void SetFullbright(bool bIsSet)
 //
 void SpeedHack(float mSpeed)
 {
-	UWorld* pWorld = Config.gWorld;
+	UWorld* pWorld = Config.GetUWorld();
 	if (!pWorld)
 		return;
 
